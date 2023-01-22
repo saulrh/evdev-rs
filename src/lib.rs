@@ -11,8 +11,7 @@
 //! use evdev_rs::Device;
 //! use std::fs::File;
 //!
-//! let file = File::open("/dev/input/event0").unwrap();
-//! let mut d = Device::new_from_file(file).unwrap();
+//! let mut d = Device::new_from_path("/dev/input/event0").unwrap();
 //! ```
 //!
 //! ## Getting the next event
@@ -22,11 +21,10 @@
 //! use std::fs::File;
 //! use evdev_rs::ReadFlag;
 //!
-//! let file = File::open("/dev/input/event0").unwrap();
-//! let mut d = Device::new_from_file(file).unwrap();
+//! let mut d = Device::new_from_path("/dev/input/event0").unwrap();
 //!
 //! loop {
-//!     let ev = d.next_event(ReadFlag::NORMAL | ReadFlag::BLOCKING).map(|val| val.1);
+//!     let ev = d.next_event(ReadFlag::NORMAL).map(|val| val.1);
 //!     match ev {
 //!         Ok(ev) => println!("Event: time {}.{}, ++++++++++++++++++++ {} +++++++++++++++",
 //!                           ev.time.tv_sec,
@@ -61,6 +59,10 @@ use std::time::{Duration, SystemTime, SystemTimeError, UNIX_EPOCH};
 use enums::*;
 use util::*;
 
+pub use util::EventCodeIterator;
+pub use util::EventTypeIterator;
+pub use util::InputPropIterator;
+
 use evdev_sys as raw;
 
 #[doc(inline)]
@@ -69,6 +71,8 @@ pub use device::Device;
 pub use device::DeviceWrapper;
 #[doc(inline)]
 pub use device::Enable;
+#[doc(inline)]
+pub use device::EnableCodeData;
 #[doc(inline)]
 pub use device::UninitDevice;
 #[doc(inline)]
@@ -124,7 +128,7 @@ pub struct DeviceId {
     pub version: u16,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 /// used by EVIOCGABS/EVIOCSABS ioctls
 pub struct AbsInfo {
     /// latest reported value for the axis
@@ -145,7 +149,7 @@ pub struct AbsInfo {
 }
 
 impl AbsInfo {
-    pub fn from_raw(absinfo: libc::input_absinfo) -> AbsInfo {
+    pub const fn from_raw(absinfo: libc::input_absinfo) -> AbsInfo {
         AbsInfo {
             value: absinfo.value,
             minimum: absinfo.minimum,
@@ -156,7 +160,7 @@ impl AbsInfo {
         }
     }
 
-    pub fn as_raw(&self) -> libc::input_absinfo {
+    pub const fn as_raw(&self) -> libc::input_absinfo {
         libc::input_absinfo {
             value: self.value,
             minimum: self.minimum,
@@ -199,7 +203,7 @@ impl TryInto<SystemTime> for TimeVal {
 }
 
 impl TimeVal {
-    pub fn new(tv_sec: time_t, tv_usec: suseconds_t) -> TimeVal {
+    pub const fn new(tv_sec: time_t, tv_usec: suseconds_t) -> TimeVal {
         const MICROS_PER_SEC: suseconds_t = 1_000_000;
         TimeVal {
             tv_sec: tv_sec + tv_usec / MICROS_PER_SEC,
@@ -207,14 +211,14 @@ impl TimeVal {
         }
     }
 
-    pub fn from_raw(timeval: &libc::timeval) -> TimeVal {
+    pub const fn from_raw(timeval: &libc::timeval) -> TimeVal {
         TimeVal {
             tv_sec: timeval.tv_sec,
             tv_usec: timeval.tv_usec,
         }
     }
 
-    pub fn as_raw(&self) -> libc::timeval {
+    pub const fn as_raw(&self) -> libc::timeval {
         libc::timeval {
             tv_sec: self.tv_sec,
             tv_usec: self.tv_usec,
@@ -233,7 +237,7 @@ pub struct InputEvent {
 }
 
 impl InputEvent {
-    pub fn new(timeval: &TimeVal, code: &EventCode, value: i32) -> InputEvent {
+    pub const fn new(timeval: &TimeVal, code: &EventCode, value: i32) -> InputEvent {
         InputEvent {
             time: *timeval,
             event_code: *code,

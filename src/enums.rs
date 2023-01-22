@@ -23,7 +23,7 @@ pub enum EventType {
     EV_MAX = 31,
 }
 
-pub fn int_to_event_type(code: u32) -> Option<EventType> {
+pub const fn int_to_event_type(code: u32) -> Option<EventType> {
     match code {
         0 => Some(EventType::EV_SYN),
         1 => Some(EventType::EV_KEY),
@@ -105,7 +105,7 @@ pub enum EV_REL {
     REL_MAX = 15,
 }
 
-pub fn int_to_ev_rel(code: u32) -> Option<EV_REL> {
+pub const fn int_to_ev_rel(code: u32) -> Option<EV_REL> {
     match code {
         0 => Some(EV_REL::REL_X),
         1 => Some(EV_REL::REL_Y),
@@ -197,7 +197,7 @@ pub enum EV_ABS {
     ABS_MAX = 63,
 }
 
-pub fn int_to_ev_abs(code: u32) -> Option<EV_ABS> {
+pub const fn int_to_ev_abs(code: u32) -> Option<EV_ABS> {
     match code {
         0 => Some(EV_ABS::ABS_X),
         1 => Some(EV_ABS::ABS_Y),
@@ -500,7 +500,7 @@ pub enum EV_KEY {
     KEY_PAUSECD = 201,
     KEY_PROG3 = 202,
     KEY_PROG4 = 203,
-    KEY_DASHBOARD = 204,
+    KEY_ALL_APPLICATIONS = 204,
     KEY_SUSPEND = 205,
     KEY_CLOSE = 206,
     KEY_PLAY = 207,
@@ -717,6 +717,8 @@ pub enum EV_KEY {
     KEY_VOICECOMMAND = 582,
     KEY_ASSISTANT = 583,
     KEY_KBD_LAYOUT_NEXT = 584,
+    KEY_EMOJI_PICKER = 585,
+    KEY_DICTATE = 586,
     KEY_BRIGHTNESS_MIN = 592,
     KEY_BRIGHTNESS_MAX = 593,
     KEY_KBDINPUTASSIST_PREV = 608,
@@ -898,7 +900,7 @@ pub enum EV_KEY {
     BTN_TRIGGER_HAPPY40 = 743,
 }
 
-pub fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
+pub const fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
     match code {
         0 => Some(EV_KEY::KEY_RESERVED),
         1 => Some(EV_KEY::KEY_ESC),
@@ -1098,7 +1100,7 @@ pub fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
         201 => Some(EV_KEY::KEY_PAUSECD),
         202 => Some(EV_KEY::KEY_PROG3),
         203 => Some(EV_KEY::KEY_PROG4),
-        204 => Some(EV_KEY::KEY_DASHBOARD),
+        204 => Some(EV_KEY::KEY_ALL_APPLICATIONS),
         205 => Some(EV_KEY::KEY_SUSPEND),
         206 => Some(EV_KEY::KEY_CLOSE),
         207 => Some(EV_KEY::KEY_PLAY),
@@ -1315,6 +1317,8 @@ pub fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
         582 => Some(EV_KEY::KEY_VOICECOMMAND),
         583 => Some(EV_KEY::KEY_ASSISTANT),
         584 => Some(EV_KEY::KEY_KBD_LAYOUT_NEXT),
+        585 => Some(EV_KEY::KEY_EMOJI_PICKER),
+        586 => Some(EV_KEY::KEY_DICTATE),
         592 => Some(EV_KEY::KEY_BRIGHTNESS_MIN),
         593 => Some(EV_KEY::KEY_BRIGHTNESS_MAX),
         608 => Some(EV_KEY::KEY_KBDINPUTASSIST_PREV),
@@ -1700,7 +1704,7 @@ impl std::str::FromStr for EV_KEY {
             "KEY_PAUSECD" => Ok(EV_KEY::KEY_PAUSECD),
             "KEY_PROG3" => Ok(EV_KEY::KEY_PROG3),
             "KEY_PROG4" => Ok(EV_KEY::KEY_PROG4),
-            "KEY_DASHBOARD" => Ok(EV_KEY::KEY_DASHBOARD),
+            "KEY_ALL_APPLICATIONS" => Ok(EV_KEY::KEY_ALL_APPLICATIONS),
             "KEY_SUSPEND" => Ok(EV_KEY::KEY_SUSPEND),
             "KEY_CLOSE" => Ok(EV_KEY::KEY_CLOSE),
             "KEY_PLAY" => Ok(EV_KEY::KEY_PLAY),
@@ -1917,6 +1921,8 @@ impl std::str::FromStr for EV_KEY {
             "KEY_VOICECOMMAND" => Ok(EV_KEY::KEY_VOICECOMMAND),
             "KEY_ASSISTANT" => Ok(EV_KEY::KEY_ASSISTANT),
             "KEY_KBD_LAYOUT_NEXT" => Ok(EV_KEY::KEY_KBD_LAYOUT_NEXT),
+            "KEY_EMOJI_PICKER" => Ok(EV_KEY::KEY_EMOJI_PICKER),
+            "KEY_DICTATE" => Ok(EV_KEY::KEY_DICTATE),
             "KEY_BRIGHTNESS_MIN" => Ok(EV_KEY::KEY_BRIGHTNESS_MIN),
             "KEY_BRIGHTNESS_MAX" => Ok(EV_KEY::KEY_BRIGHTNESS_MAX),
             "KEY_KBDINPUTASSIST_PREV" => Ok(EV_KEY::KEY_KBDINPUTASSIST_PREV),
@@ -2119,7 +2125,7 @@ pub enum EV_LED {
     LED_MAX = 15,
 }
 
-pub fn int_to_ev_led(code: u32) -> Option<EV_LED> {
+pub const fn int_to_ev_led(code: u32) -> Option<EV_LED> {
     match code {
         0 => Some(EV_LED::LED_NUML),
         1 => Some(EV_LED::LED_CAPSL),
@@ -2168,7 +2174,7 @@ pub enum EV_SND {
     SND_MAX = 7,
 }
 
-pub fn int_to_ev_snd(code: u32) -> Option<EV_SND> {
+pub const fn int_to_ev_snd(code: u32) -> Option<EV_SND> {
     match code {
         0 => Some(EV_SND::SND_CLICK),
         1 => Some(EV_SND::SND_BELL),
@@ -2204,7 +2210,7 @@ pub enum EV_MSC {
     MSC_MAX = 7,
 }
 
-pub fn int_to_ev_msc(code: u32) -> Option<EV_MSC> {
+pub const fn int_to_ev_msc(code: u32) -> Option<EV_MSC> {
     match code {
         0 => Some(EV_MSC::MSC_SERIAL),
         1 => Some(EV_MSC::MSC_PULSELED),
@@ -2260,7 +2266,7 @@ impl EV_SW {
     pub const SW_MAX: EV_SW = EV_SW::SW_MACHINE_COVER;
 }
 
-pub fn int_to_ev_sw(code: u32) -> Option<EV_SW> {
+pub const fn int_to_ev_sw(code: u32) -> Option<EV_SW> {
     match code {
         0 => Some(EV_SW::SW_LID),
         1 => Some(EV_SW::SW_TABLET_MODE),
@@ -2320,7 +2326,7 @@ pub enum EV_SYN {
     SYN_MAX = 15,
 }
 
-pub fn int_to_ev_syn(code: u32) -> Option<EV_SYN> {
+pub const fn int_to_ev_syn(code: u32) -> Option<EV_SYN> {
     match code {
         0 => Some(EV_SYN::SYN_REPORT),
         1 => Some(EV_SYN::SYN_CONFIG),
@@ -2357,7 +2363,7 @@ impl EV_REP {
     pub const REP_MAX: EV_REP = EV_REP::REP_PERIOD;
 }
 
-pub fn int_to_ev_rep(code: u32) -> Option<EV_REP> {
+pub const fn int_to_ev_rep(code: u32) -> Option<EV_REP> {
     match code {
         0 => Some(EV_REP::REP_DELAY),
         1 => Some(EV_REP::REP_PERIOD),
@@ -2390,7 +2396,7 @@ pub enum InputProp {
     INPUT_PROP_MAX = 31,
 }
 
-pub fn int_to_input_prop(code: u32) -> Option<InputProp> {
+pub const fn int_to_input_prop(code: u32) -> Option<InputProp> {
     match code {
         0 => Some(InputProp::INPUT_PROP_POINTER),
         1 => Some(InputProp::INPUT_PROP_DIRECT),
@@ -2450,7 +2456,7 @@ impl EV_FF {
     pub const FF_STATUS_MAX: EV_FF = EV_FF::FF_STATUS_PLAYING;
 }
 
-pub fn int_to_ev_ff(code: u32) -> Option<EV_FF> {
+pub const fn int_to_ev_ff(code: u32) -> Option<EV_FF> {
     match code {
         0 => Some(EV_FF::FF_STATUS_STOPPED),
         1 => Some(EV_FF::FF_STATUS_PLAYING),
@@ -2531,7 +2537,7 @@ pub enum BusType {
     BUS_INTEL_ISHTP = 31,
 }
 
-pub fn int_to_bus_type(code: u32) -> Option<BusType> {
+pub const fn int_to_bus_type(code: u32) -> Option<BusType> {
     match code {
         1 => Some(BusType::BUS_PCI),
         2 => Some(BusType::BUS_ISAPNP),

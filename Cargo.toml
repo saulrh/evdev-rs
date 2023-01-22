@@ -1,13 +1,12 @@
 [package]
 name = "evdev-rs"
-version = "0.5.0"
+version = "0.6.1"
 authors = ["Nayan Deshmukh <nayan26deshmukh@gmail.com>"]
 license = "MIT/Apache-2.0"
 keywords = ["evdev"]
 readme = "README.md"
 repository = "https://github.com/ndesh26/evdev-rs"
 homepage = "https://github.com/ndesh26/evdev-rs"
-documentation = ""
 edition = "2018"
 description = """
 Bindings to libevdev for interacting with evdev devices. It moves the
@@ -22,10 +21,10 @@ libevdev-1-10 = ["evdev-sys/libevdev-1-10"]
 
 [dependencies]
 serde = { version = "1.0", default-features = false, features=["derive"], optional = true }
-evdev-sys = { path = "evdev-sys", version = "0.2.2" }
+evdev-sys = { path = "evdev-sys", version = "0.2.5" }
 libc = "0.2.67"
 bitflags = "1.2.1"
 log = "0.4.8"
 
 [package.metadata.docs.rs]
-features = ["serde", "libevdev-1-10"]
+features = ["serde"]
