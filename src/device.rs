@@ -6,7 +6,7 @@ use std::fs::OpenOptions;
 use std::io::Read;
 use std::mem::ManuallyDrop;
 use std::os::unix::fs::OpenOptionsExt;
-use std::os::unix::io::{AsRawFd, FromRawFd};
+use std::os::unix::io::{AsRawFd, FromRawFd, RawFd};
 use std::path::Path;
 use std::{io, ptr};
 
@@ -877,8 +877,9 @@ impl Device {
             value: 0,
         };
 
-        let result =
-            unsafe { raw::libevdev_next_event(self.raw, flags.bits as c_uint, &mut ev) };
+        let result = unsafe {
+            raw::libevdev_next_event(self.raw, flags.bits() as c_uint, &mut ev)
+        };
 
         let event = InputEvent {
             time: TimeVal {
@@ -912,5 +913,11 @@ impl std::fmt::Debug for Device {
             .field("phys", &self.phys())
             .field("uniq", &self.uniq())
             .finish()
+    }
+}
+
+impl AsRawFd for Device {
+    fn as_raw_fd(&self) -> RawFd {
+        self.file.as_raw_fd()
     }
 }

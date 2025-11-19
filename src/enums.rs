@@ -148,6 +148,12 @@ impl std::str::FromStr for EV_REL {
     }
 }
 
+impl std::fmt::Display for EV_REL {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[allow(non_camel_case_types)]
 #[cfg_attr(feature = "serde", derive(Serialize), derive(Deserialize))]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -177,6 +183,7 @@ pub enum EV_ABS {
     ABS_TILT_Y = 27,
     ABS_TOOL_WIDTH = 28,
     ABS_VOLUME = 32,
+    ABS_PROFILE = 33,
     ABS_MISC = 40,
     ABS_RESERVED = 46,
     ABS_MT_SLOT = 47,
@@ -224,6 +231,7 @@ pub const fn int_to_ev_abs(code: u32) -> Option<EV_ABS> {
         27 => Some(EV_ABS::ABS_TILT_Y),
         28 => Some(EV_ABS::ABS_TOOL_WIDTH),
         32 => Some(EV_ABS::ABS_VOLUME),
+        33 => Some(EV_ABS::ABS_PROFILE),
         40 => Some(EV_ABS::ABS_MISC),
         46 => Some(EV_ABS::ABS_RESERVED),
         47 => Some(EV_ABS::ABS_MT_SLOT),
@@ -275,6 +283,7 @@ impl std::str::FromStr for EV_ABS {
             "ABS_TILT_Y" => Ok(EV_ABS::ABS_TILT_Y),
             "ABS_TOOL_WIDTH" => Ok(EV_ABS::ABS_TOOL_WIDTH),
             "ABS_VOLUME" => Ok(EV_ABS::ABS_VOLUME),
+            "ABS_PROFILE" => Ok(EV_ABS::ABS_PROFILE),
             "ABS_MISC" => Ok(EV_ABS::ABS_MISC),
             "ABS_RESERVED" => Ok(EV_ABS::ABS_RESERVED),
             "ABS_MT_SLOT" => Ok(EV_ABS::ABS_MT_SLOT),
@@ -295,6 +304,12 @@ impl std::str::FromStr for EV_ABS {
             "ABS_MAX" => Ok(EV_ABS::ABS_MAX),
             _ => Err(()),
         }
+    }
+}
+
+impl std::fmt::Display for EV_ABS {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -708,6 +723,7 @@ pub enum EV_KEY {
     KEY_LIGHTS_TOGGLE = 542,
     KEY_ALS_TOGGLE = 560,
     KEY_ROTATE_LOCK_TOGGLE = 561,
+    KEY_REFRESH_RATE_TOGGLE = 562,
     KEY_BUTTONCONFIG = 576,
     KEY_TASKMANAGER = 577,
     KEY_JOURNAL = 578,
@@ -719,6 +735,11 @@ pub enum EV_KEY {
     KEY_KBD_LAYOUT_NEXT = 584,
     KEY_EMOJI_PICKER = 585,
     KEY_DICTATE = 586,
+    KEY_CAMERA_ACCESS_ENABLE = 587,
+    KEY_CAMERA_ACCESS_DISABLE = 588,
+    KEY_CAMERA_ACCESS_TOGGLE = 589,
+    KEY_ACCESSIBILITY = 590,
+    KEY_DO_NOT_DISTURB = 591,
     KEY_BRIGHTNESS_MIN = 592,
     KEY_BRIGHTNESS_MAX = 593,
     KEY_KBDINPUTASSIST_PREV = 608,
@@ -748,6 +769,21 @@ pub enum EV_KEY {
     KEY_ONSCREEN_KEYBOARD = 632,
     KEY_PRIVACY_SCREEN_TOGGLE = 633,
     KEY_SELECTIVE_SCREENSHOT = 634,
+    KEY_NEXT_ELEMENT = 635,
+    KEY_PREVIOUS_ELEMENT = 636,
+    KEY_AUTOPILOT_ENGAGE_TOGGLE = 637,
+    KEY_MARK_WAYPOINT = 638,
+    KEY_SOS = 639,
+    KEY_NAV_CHART = 640,
+    KEY_FISHING_CHART = 641,
+    KEY_SINGLE_RANGE_RADAR = 642,
+    KEY_DUAL_RANGE_RADAR = 643,
+    KEY_RADAR_OVERLAY = 644,
+    KEY_TRADITIONAL_SONAR = 645,
+    KEY_CLEARVU_SONAR = 646,
+    KEY_SIDEVU_SONAR = 647,
+    KEY_NAV_INFO = 648,
+    KEY_BRIGHTNESS_MENU = 649,
     KEY_MACRO1 = 656,
     KEY_MACRO2 = 657,
     KEY_MACRO3 = 658,
@@ -1324,6 +1360,7 @@ pub const fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
         542 => Some(EV_KEY::KEY_LIGHTS_TOGGLE),
         560 => Some(EV_KEY::KEY_ALS_TOGGLE),
         561 => Some(EV_KEY::KEY_ROTATE_LOCK_TOGGLE),
+        562 => Some(EV_KEY::KEY_REFRESH_RATE_TOGGLE),
         576 => Some(EV_KEY::KEY_BUTTONCONFIG),
         577 => Some(EV_KEY::KEY_TASKMANAGER),
         578 => Some(EV_KEY::KEY_JOURNAL),
@@ -1335,6 +1372,11 @@ pub const fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
         584 => Some(EV_KEY::KEY_KBD_LAYOUT_NEXT),
         585 => Some(EV_KEY::KEY_EMOJI_PICKER),
         586 => Some(EV_KEY::KEY_DICTATE),
+        587 => Some(EV_KEY::KEY_CAMERA_ACCESS_ENABLE),
+        588 => Some(EV_KEY::KEY_CAMERA_ACCESS_DISABLE),
+        589 => Some(EV_KEY::KEY_CAMERA_ACCESS_TOGGLE),
+        590 => Some(EV_KEY::KEY_ACCESSIBILITY),
+        591 => Some(EV_KEY::KEY_DO_NOT_DISTURB),
         592 => Some(EV_KEY::KEY_BRIGHTNESS_MIN),
         593 => Some(EV_KEY::KEY_BRIGHTNESS_MAX),
         608 => Some(EV_KEY::KEY_KBDINPUTASSIST_PREV),
@@ -1364,6 +1406,21 @@ pub const fn int_to_ev_key(code: u32) -> Option<EV_KEY> {
         632 => Some(EV_KEY::KEY_ONSCREEN_KEYBOARD),
         633 => Some(EV_KEY::KEY_PRIVACY_SCREEN_TOGGLE),
         634 => Some(EV_KEY::KEY_SELECTIVE_SCREENSHOT),
+        635 => Some(EV_KEY::KEY_NEXT_ELEMENT),
+        636 => Some(EV_KEY::KEY_PREVIOUS_ELEMENT),
+        637 => Some(EV_KEY::KEY_AUTOPILOT_ENGAGE_TOGGLE),
+        638 => Some(EV_KEY::KEY_MARK_WAYPOINT),
+        639 => Some(EV_KEY::KEY_SOS),
+        640 => Some(EV_KEY::KEY_NAV_CHART),
+        641 => Some(EV_KEY::KEY_FISHING_CHART),
+        642 => Some(EV_KEY::KEY_SINGLE_RANGE_RADAR),
+        643 => Some(EV_KEY::KEY_DUAL_RANGE_RADAR),
+        644 => Some(EV_KEY::KEY_RADAR_OVERLAY),
+        645 => Some(EV_KEY::KEY_TRADITIONAL_SONAR),
+        646 => Some(EV_KEY::KEY_CLEARVU_SONAR),
+        647 => Some(EV_KEY::KEY_SIDEVU_SONAR),
+        648 => Some(EV_KEY::KEY_NAV_INFO),
+        649 => Some(EV_KEY::KEY_BRIGHTNESS_MENU),
         656 => Some(EV_KEY::KEY_MACRO1),
         657 => Some(EV_KEY::KEY_MACRO2),
         658 => Some(EV_KEY::KEY_MACRO3),
@@ -1944,6 +2001,7 @@ impl std::str::FromStr for EV_KEY {
             "KEY_LIGHTS_TOGGLE" => Ok(EV_KEY::KEY_LIGHTS_TOGGLE),
             "KEY_ALS_TOGGLE" => Ok(EV_KEY::KEY_ALS_TOGGLE),
             "KEY_ROTATE_LOCK_TOGGLE" => Ok(EV_KEY::KEY_ROTATE_LOCK_TOGGLE),
+            "KEY_REFRESH_RATE_TOGGLE" => Ok(EV_KEY::KEY_REFRESH_RATE_TOGGLE),
             "KEY_BUTTONCONFIG" => Ok(EV_KEY::KEY_BUTTONCONFIG),
             "KEY_TASKMANAGER" => Ok(EV_KEY::KEY_TASKMANAGER),
             "KEY_JOURNAL" => Ok(EV_KEY::KEY_JOURNAL),
@@ -1955,6 +2013,11 @@ impl std::str::FromStr for EV_KEY {
             "KEY_KBD_LAYOUT_NEXT" => Ok(EV_KEY::KEY_KBD_LAYOUT_NEXT),
             "KEY_EMOJI_PICKER" => Ok(EV_KEY::KEY_EMOJI_PICKER),
             "KEY_DICTATE" => Ok(EV_KEY::KEY_DICTATE),
+            "KEY_CAMERA_ACCESS_ENABLE" => Ok(EV_KEY::KEY_CAMERA_ACCESS_ENABLE),
+            "KEY_CAMERA_ACCESS_DISABLE" => Ok(EV_KEY::KEY_CAMERA_ACCESS_DISABLE),
+            "KEY_CAMERA_ACCESS_TOGGLE" => Ok(EV_KEY::KEY_CAMERA_ACCESS_TOGGLE),
+            "KEY_ACCESSIBILITY" => Ok(EV_KEY::KEY_ACCESSIBILITY),
+            "KEY_DO_NOT_DISTURB" => Ok(EV_KEY::KEY_DO_NOT_DISTURB),
             "KEY_BRIGHTNESS_MIN" => Ok(EV_KEY::KEY_BRIGHTNESS_MIN),
             "KEY_BRIGHTNESS_MAX" => Ok(EV_KEY::KEY_BRIGHTNESS_MAX),
             "KEY_KBDINPUTASSIST_PREV" => Ok(EV_KEY::KEY_KBDINPUTASSIST_PREV),
@@ -1984,6 +2047,21 @@ impl std::str::FromStr for EV_KEY {
             "KEY_ONSCREEN_KEYBOARD" => Ok(EV_KEY::KEY_ONSCREEN_KEYBOARD),
             "KEY_PRIVACY_SCREEN_TOGGLE" => Ok(EV_KEY::KEY_PRIVACY_SCREEN_TOGGLE),
             "KEY_SELECTIVE_SCREENSHOT" => Ok(EV_KEY::KEY_SELECTIVE_SCREENSHOT),
+            "KEY_NEXT_ELEMENT" => Ok(EV_KEY::KEY_NEXT_ELEMENT),
+            "KEY_PREVIOUS_ELEMENT" => Ok(EV_KEY::KEY_PREVIOUS_ELEMENT),
+            "KEY_AUTOPILOT_ENGAGE_TOGGLE" => Ok(EV_KEY::KEY_AUTOPILOT_ENGAGE_TOGGLE),
+            "KEY_MARK_WAYPOINT" => Ok(EV_KEY::KEY_MARK_WAYPOINT),
+            "KEY_SOS" => Ok(EV_KEY::KEY_SOS),
+            "KEY_NAV_CHART" => Ok(EV_KEY::KEY_NAV_CHART),
+            "KEY_FISHING_CHART" => Ok(EV_KEY::KEY_FISHING_CHART),
+            "KEY_SINGLE_RANGE_RADAR" => Ok(EV_KEY::KEY_SINGLE_RANGE_RADAR),
+            "KEY_DUAL_RANGE_RADAR" => Ok(EV_KEY::KEY_DUAL_RANGE_RADAR),
+            "KEY_RADAR_OVERLAY" => Ok(EV_KEY::KEY_RADAR_OVERLAY),
+            "KEY_TRADITIONAL_SONAR" => Ok(EV_KEY::KEY_TRADITIONAL_SONAR),
+            "KEY_CLEARVU_SONAR" => Ok(EV_KEY::KEY_CLEARVU_SONAR),
+            "KEY_SIDEVU_SONAR" => Ok(EV_KEY::KEY_SIDEVU_SONAR),
+            "KEY_NAV_INFO" => Ok(EV_KEY::KEY_NAV_INFO),
+            "KEY_BRIGHTNESS_MENU" => Ok(EV_KEY::KEY_BRIGHTNESS_MENU),
             "KEY_MACRO1" => Ok(EV_KEY::KEY_MACRO1),
             "KEY_MACRO2" => Ok(EV_KEY::KEY_MACRO2),
             "KEY_MACRO3" => Ok(EV_KEY::KEY_MACRO3),
@@ -2139,6 +2217,12 @@ impl std::str::FromStr for EV_KEY {
     }
 }
 
+impl std::fmt::Display for EV_KEY {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[allow(non_camel_case_types)]
 #[cfg_attr(feature = "serde", derive(Serialize), derive(Deserialize))]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -2196,6 +2280,12 @@ impl std::str::FromStr for EV_LED {
     }
 }
 
+impl std::fmt::Display for EV_LED {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[allow(non_camel_case_types)]
 #[cfg_attr(feature = "serde", derive(Serialize), derive(Deserialize))]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -2226,6 +2316,12 @@ impl std::str::FromStr for EV_SND {
             "SND_MAX" => Ok(EV_SND::SND_MAX),
             _ => Err(()),
         }
+    }
+}
+
+impl std::fmt::Display for EV_SND {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -2268,6 +2364,12 @@ impl std::str::FromStr for EV_MSC {
             "MSC_MAX" => Ok(EV_MSC::MSC_MAX),
             _ => Err(()),
         }
+    }
+}
+
+impl std::fmt::Display for EV_MSC {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -2347,6 +2449,12 @@ impl std::str::FromStr for EV_SW {
     }
 }
 
+impl std::fmt::Display for EV_SW {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[allow(non_camel_case_types)]
 #[cfg_attr(feature = "serde", derive(Serialize), derive(Deserialize))]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -2383,6 +2491,12 @@ impl std::str::FromStr for EV_SYN {
     }
 }
 
+impl std::fmt::Display for EV_SYN {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[allow(non_camel_case_types)]
 #[cfg_attr(feature = "serde", derive(Serialize), derive(Deserialize))]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -2411,6 +2525,12 @@ impl std::str::FromStr for EV_REP {
             "REP_PERIOD" => Ok(EV_REP::REP_PERIOD),
             _ => Err(()),
         }
+    }
+}
+
+impl std::fmt::Display for EV_REP {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -2541,6 +2661,12 @@ impl std::str::FromStr for EV_FF {
     }
 }
 
+impl std::fmt::Display for EV_FF {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[allow(non_camel_case_types)]
 #[cfg_attr(feature = "serde", derive(Serialize), derive(Deserialize))]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -2567,6 +2693,7 @@ pub enum BusType {
     BUS_RMI = 29,
     BUS_CEC = 30,
     BUS_INTEL_ISHTP = 31,
+    BUS_AMD_SFH = 32,
 }
 
 pub const fn int_to_bus_type(code: u32) -> Option<BusType> {
@@ -2593,6 +2720,7 @@ pub const fn int_to_bus_type(code: u32) -> Option<BusType> {
         29 => Some(BusType::BUS_RMI),
         30 => Some(BusType::BUS_CEC),
         31 => Some(BusType::BUS_INTEL_ISHTP),
+        32 => Some(BusType::BUS_AMD_SFH),
         _ => None,
     }
 }
@@ -2623,7 +2751,14 @@ impl std::str::FromStr for BusType {
             "BUS_RMI" => Ok(BusType::BUS_RMI),
             "BUS_CEC" => Ok(BusType::BUS_CEC),
             "BUS_INTEL_ISHTP" => Ok(BusType::BUS_INTEL_ISHTP),
+            "BUS_AMD_SFH" => Ok(BusType::BUS_AMD_SFH),
             _ => Err(()),
         }
+    }
+}
+
+impl std::fmt::Display for BusType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
